@@ -20,14 +20,16 @@ video.addEventListener("timeupdate", function() {
 
         if (video.currentTime < 18) {
                 caption.innerHTML ="<h3>...</h3>";
-        } else if (video.currentTime < 35) {
-                caption.innerHTML = "<h3>We're no strangers to love<br />You know the rules and so do I<br />A full commitment's what I'm thinking of<br/>You wouldn't get this from any other guy</h3>";
-        } else if (video.currentTime > 35 && video.currentTime < 42
+        }
+        else if (video.currentTime < 35) {
+                caption.innerHTML = "<p>We're no strangers to love<br />You know the rules and so do I<br />A full commitment's what I'm thinking of<br/>You wouldn't get this from any other guy</p>";
+        }
+        else if (video.currentTime > 35 && video.currentTime < 42
                   || video.currentTime > 153 && video.currentTime < 161) {
                 caption.innerHTML = "<p>I just wanna tell you how I'm feeling<br />Gotta make you understand</p>";
-        } else if (video.currentTime > 42 && video.crruentTime < 60
+        } else if (video.currentTime > 42 && video.currentTime < 60
                   || video.currentTime > 85 && video.currentTime < 119
-                  || video.currentTime > 161 {
+                  || video.currentTime > 161) {
                 caption.innerHTML = "<p>Never gonna give you up<br />Never gonna let you down<br />Never gonna run around and desert you<br />Never gonna make you cry<br />Never gonna say goodbye<br />Never gonna tell a lie and hurt you<p>";
         } else if (video.currentTime > 60 && video.currentTime < 77
                   || video.currentTime > 136 && video.currentTime < 153) {
