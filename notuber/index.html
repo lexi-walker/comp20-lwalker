@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Simple Map</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="style.css" type="text/css" />
+    </head>
+
+    <body>
+        <div id="map"></div>
+        <script>
+            var map;
+            var userMarker;
+            var markers = [];
+
+            function setUserMarker(crds, image){
+                userMarker = new google.maps.Marker({
+                    position: crds,
+                    map: map,
+                    icon: image
+                });
+            }
+
+            function setMarkers(crds, data, usrImg, clientImg) {
+                setUserMarker(crds, usrImg);
+                console.log(JSON.stringify(data));
+                    for (i = 0; i < data.length; i++) {
+                    markers[i] = new google.maps.Marker({
+                        position: {lat: data[i].lat, lng: data[i].lng},
+                        map: map,
+                        icon: clientImg
+                    });
+                    //console.log(JSON.stringify(data.vehicles[i].username));
+                    //console.log(theString);
+                }
+            }
+
+            function updateMap(){
+                if (navigator.geolocation) {
+                    console.log("here in updateMap");
+                    navigator.geolocation.getCurrentPosition(function (pos) {
+                        map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+
+                        var request = new XMLHttpRequest();
+                        request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+                        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        request.onreadystatechange = function() {
+                            //doesnt necessarily guarantee that data will be sent or that the request will be successful
+                            if (request.readyState == 4 && request.status == 200) {
+                                theString = request.responseText;
+                                //parse response text to JavaScript - don’t want to do this unless readyState is 4
+                                data = JSON.parse(theString);
+                                if (data.vehicles) {
+                                    setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
+                                                data.vehicles, "passenger.png", "car.png");
+                                } else if (data.passengers) {
+                                    setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
+                                                data.passengers, "car.png", "passenger.png");
+                                }
+                            }
+                        };
+                        params = "username=6pkpLm4bN1&lat=" + pos.coords.latitude + "&lng=" + pos.coords.longitude;
+                        request.send(params);
+                    });
+                }
+            }
+
+            function initMap() {
+                console.log('in initMap');
+                map = new google.maps.Map(document.getElementById('map'),
+                   {center: {lat: 42.3601, lng: -71.0589}, zoom: 12});
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuZymosihudAnUATGDseXSzfOnbvA1CAY&callback=initMap"
+        async defer>
+        </script>
+        <script>
+            updateMap();
+        </script>
+    </body>
+</html>
