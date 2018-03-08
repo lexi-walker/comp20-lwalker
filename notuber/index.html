@@ -5,13 +5,14 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="style.css" type="text/css" />
     </head>
-
     <body>
         <div id="map"></div>
         <script>
             var map;
             var userMarker;
             var markers = [];
+            var info;
+            var shortestDist;
 
             function setUserMarker(crds, image){
                 userMarker = new google.maps.Marker({
@@ -23,16 +24,36 @@
 
             function setMarkers(crds, data, usrImg, clientImg) {
                 setUserMarker(crds, usrImg);
-                console.log(JSON.stringify(data));
-                    for (i = 0; i < data.length; i++) {
-                    markers[i] = new google.maps.Marker({
-                        position: {lat: data[i].lat, lng: data[i].lng},
+                //console.log(JSON.stringify(data));
+                info = new google.maps.InfoWindow({
+                    content: "hello"
+                });
+                for (i = 0; i < data.length; i++) {
+                    //pos = {lat: data[i].lat, lng: data[i].lng};
+                    pos = new google.maps.LatLng(data[i].lat, data[i].lng);
+                    marker = new google.maps.Marker({
+                        position: pos,
                         map: map,
                         icon: clientImg
                     });
-                    //console.log(JSON.stringify(data.vehicles[i].username));
-                    //console.log(theString);
+                    var distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(crds), pos) * 0.000621371;
+                    if (i == 0) {
+                        shortestDist = distance;
+                    } else if (distance < shortestDist) {
+                        shortestDist = distance;
+                    }
+                    var content = "Username: " + data[i].username + "<br />Distance: " + distance;
+                    console.log(distance);
+                    google.maps.event.addListener(marker, 'click', (function(marker, content, info){
+                        return function() {
+                            info.setContent(content);
+                            info.open(map, marker);
+                        };
+                        })(marker, content, info));
                 }
+
+                return shortestDist;
+
             }
 
             function updateMap(){
@@ -50,13 +71,26 @@
                                 theString = request.responseText;
                                 //parse response text to JavaScript - don’t want to do this unless readyState is 4
                                 data = JSON.parse(theString);
+                                var dist = -1;
+                                var word;
                                 if (data.vehicles) {
-                                    setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
-                                                data.vehicles, "passenger.png", "car.png");
+                                    dist = setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
+                                            data.vehicles, "passenger.png", "car.png");
+                                    word = "vehicle";
                                 } else if (data.passengers) {
-                                    setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
+                                    dist = setMarkers({lat: pos.coords.latitude, lng: pos.coords.longitude},
                                                 data.passengers, "car.png", "passenger.png");
+                                    word = "passenger";
                                 }
+
+                                var usrContent = "Username: 6pkpLm4bN1<br />Distance to closest " + word + ": " + dist;
+                                google.maps.event.addListener(userMarker, 'click', (function(userMarker, usrContent, info){
+                                    return function() {
+                                        info.setContent(usrContent);
+                                        info.open(map, userMarker);
+                                    };
+                                })(userMarker, usrContent, info));
+
                             }
                         };
                         params = "username=6pkpLm4bN1&lat=" + pos.coords.latitude + "&lng=" + pos.coords.longitude;
@@ -71,7 +105,7 @@
                    {center: {lat: 42.3601, lng: -71.0589}, zoom: 12});
             }
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuZymosihudAnUATGDseXSzfOnbvA1CAY&callback=initMap"
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuZymosihudAnUATGDseXSzfOnbvA1CAY&libraries=geometry&callback=initMap"
         async defer>
         </script>
         <script>
