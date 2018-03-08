@@ -1,6 +1,4 @@
-**Assignment 2**
-**Alexis (Lexi) Walker**
-**March 8, 2018**
+**Assignment 2 * Alexis (Lexi) Walker * March 8, 2018**
 # NotUber
 
 
