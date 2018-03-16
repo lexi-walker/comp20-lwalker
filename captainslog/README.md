@@ -4,8 +4,10 @@ Lexi Walker
 
 
 ### Implementation
-
+Implementation should match expectations for lab.
 
 ### Collaboration
+Jason Scanlon: discussed how to store items in LocalStorage
 
 ### Hours Spent
+Hours spent: 5 hours
