@@ -63,7 +63,7 @@
                         map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
 
                         var request = new XMLHttpRequest();
-                        request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+                        request.open("POST", "https://stark-citadel-59705.herokuapp.com/rides", true);
                         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                         request.onreadystatechange = function() {
                             //doesnt necessarily guarantee that data will be sent or that the request will be successful
