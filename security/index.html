@@ -1,0 +1,35 @@
+<html>
+
+    <head>
+        <title> Security Assessment </title>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
+    </head>
+
+    <body>
+        <h1 id="title"> Security and Privacy Assessment of Assignment 3 </h1>
+        <h2> Introduction </h2>
+            <p>
+            NotUber, an ride sharing service, is a web application built using the Google Maps API and a node js heroku server with a mongodb database. It contains three endpoints:</p>
+            <ul>
+                <li> GET /: displays in HTML all riders in the database </li>
+                <li> GET /vehicle.json: returns json containing document data of given username </li>
+                <li> POST /rides: adds given username to database with latitude and longitude; replaces old entry if username is already in database </li>
+            </ul>
+            <p> With the link to another student’s app, the assignment was to find and exploit vulnerabilities. These may include XSS, Hacking Node/MongoDB, CORS, and more.  </p>
+        <h2> Methodology </h2>
+            <p> I used cURL, my web browser and Postman to test the application. With the knowledge about what components were used, and what each endpoint was intended to do, I was able to walk through many of the OWASP top 10 vulnerabilities and check whether they were exploitable or not. With “POST /rides”, I used cURL to send data in the request body that tested various vulnerabilities. With the two “GET” endpoints, I used my web browser (Google Chrome) to check the results of attempting to exploit vulnerabilities (/) or to attempt to exploit vulnerabilities through the request query (/vehicle.json).  </p>
+        <h2> Abstract of Findings </h2>
+            <p> In my experimentation with the application, I found vulnerabilities regarding the database and the input taken for the username on the POST /rides endpoint. The database allowed me to access the most recent item stored in the database with an endpoint intended to only give information about a username given by the client.  Next, I found that the lack of sanitization of inputs allowed me to send scripts to the POST /rides endpoint, which gave me the ability to display alerts and images on the GET / endpoint. These vulnerabilities allowed me to use the endpoints in ways that I shouldn’t have been able to do, which affects the functionality and success of the application. </p>
+        <h2> Issues Found </h2>
+            <p> ~put something here~ </p>
+        <h2> Conclusion </h2>
+            <p> ~put something here~ </p>
+        <h2> References </h2>
+            <ul>
+                <li> https://zanon.io/posts/nosql-injection-in-mongodb </li>
+                <li> https://www.owasp.org/index.php/Top_10_2013-Top_10 </li>
+                <li> https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS </li>
+                <li> https://www.geekboy.ninja/blog/exploiting-misconfigured-cors-cross-origin-resource-sharing/ </li>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+body {
+    font-family: 'EB Garamond', serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    color: blue;
+}
+
+p,ul {
+    margin-left: 5%;
+    margin-right: 5%;
+
+}
