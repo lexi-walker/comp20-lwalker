@@ -10,8 +10,11 @@ h2 {
     color: blue;
 }
 
-p,ul {
+p,ul{
     margin-left: 5%;
     margin-right: 5%;
+}
 
+img {
+    margin-left: calc(5% + 40px);
 }

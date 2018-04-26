@@ -22,9 +22,57 @@
         <h2> Abstract of Findings </h2>
             <p> In my experimentation with the application, I found vulnerabilities regarding the database and the input taken for the username on the POST /rides endpoint. The database allowed me to access the most recent item stored in the database with an endpoint intended to only give information about a username given by the client.  Next, I found that the lack of sanitization of inputs allowed me to send scripts to the POST /rides endpoint, which gave me the ability to display alerts and images on the GET / endpoint. These vulnerabilities allowed me to use the endpoints in ways that I shouldn’t have been able to do, which affects the functionality and success of the application. </p>
         <h2> Issues Found </h2>
-            <p> ~put something here~ </p>
+
+            <p> Issue: Database Injection </p>
+            <ul>
+                <li> Location: GET /vehicle.json </li>
+                <li> Severity: Low - allows access to unintended information, but not massive quantities of unintended information was exposed </li>
+                <li> Issue: without any sanitation of username input, I was able to perform a noSQL injection into the MongoDB database. Using a username input “username[$gt]=”, I was able to retrieve the most recent addition to the vehicles collection rather than the document corresponding to a given username, as intended by the endpoint.  </li>
+                <li> Resolution: To fix this issue, I would recommend that the programmer sanitize the username input to remove special characters that are crucial in noSQL injections, such as “$” and “[“. </li>
+            </ul>
+            <img src="nosql.png" alt="noSQL injection">
+
+            <p> Issue: Cross Site Scripting  </p>
+            <ul>
+                <li> Location: exploited through POST /rides, visible on GET / </li>
+                <li> Severity: Medium – inhibits access to functionality of app, but does not
+                     affect the rest of the page/other content within the database </li>
+                <li> Issue: without any sanitation of username input, I was able to submit a
+                     script as the username, “username=<script>alert(XSS);</script>”; when it
+                      was added to the database and displayed to GET /, it created an alert pop-up.
+                       This created a document without a valid username, and blocked the user from
+                        accessing the content of the endpoint as intended.  </li>
+                <li> Resolution: To fix this issue, I would recommend that the programmer
+                    sanitize the username input to remove special characters that are crucial
+                     in scripting, such as “<” and “/”. </li>
+            </ul>
+            <img src="xss.png" alt="Cross Site Scripting Image"> <br />
+            <img src="xss2.png" alt="Cross Site Scripting Results">
+
+            <p> Issue: Lack of HTTP Strict Transport Security (HSTS)  </p>
+            <ul>
+                <li> Location: all endpoints </li>
+                <li> Severity: High – any data, some of which is location based, is transmitted
+                     in plain text and susceptible to being intercepted </li>
+                <li> Issue: without any security, such as the use of HTTPS, the data transmitted
+                     to the server, including username, latitude and longitude, is done in
+                     plaintext, making it much easy for it to be intercepted, as in a “man in the
+                      middle” attack.   </li>
+                <li> Resolution: To fix this issue, I would recommend that the programmer enable
+                     HTTPS, which encrypts data sent, making the data much more secure. </li>
+            </ul>
+            
         <h2> Conclusion </h2>
-            <p> ~put something here~ </p>
+            <p> This application does many things well: it checks the values of the latitude and
+                 longitude thoroughly, which prevented me from being able to exploit the app in a
+                 multitude of ways; however, there are definitely still flaws. Sanitizing data
+                 would be valuable for the creator of this app to consider, as it would prevent
+                 many issues without having too much of an effect on the performance of the app,
+                 assuming that usernames cannot contain special characters. Additionally, adding HSTS
+                 could only benefit the app; in a real-world application, encrypting data is crucial
+                 for the user to feel comfortable giving necessary data. Additionally, if this were
+                 turned into a commercial app, credit card information might be transferred, which
+                 makes this vulnerability even more important to fix. </p>
         <h2> References </h2>
             <ul>
                 <li> https://zanon.io/posts/nosql-injection-in-mongodb </li>
